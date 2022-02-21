@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,13 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
+  addressConnected: string = '';
   isConnected: boolean = false;
-  address: string = 'avax1pyjf6zurg5lv3xtwau63a78fd2zna5yfdfhuv3'
-  constructor() { }
+
+  constructor(private shared:LoginService) {
+    
+        // Subscribe here, this will automatically update 
+        // "isUserLoggedIn" whenever a change to the subject is made.
+    this.shared.isUserLoggedIn.subscribe( value => {
+      this.isConnected = value;
+    }),
+    this.shared.userAddress.subscribe( value => {
+      this.addressConnected = value;
+    })
+   }
 
   ngOnInit(): void {
+  
   }
-  connect() {
-    this.isConnected = !this.isConnected;
-  }
+  
 }
+
+
